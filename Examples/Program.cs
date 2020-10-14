@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Examples
@@ -49,21 +50,64 @@ namespace Examples
             }
 
             // Kik laknak "CO" állmaban?
-            var coState = from c in customers where c.State == "CO" select c;
+            var coState = from c in customers where c.State == "CO" orderby c.Name select c;
+            Console.WriteLine("\n'CO' államban élők");
+            foreach (var c in coState)
+            {
+                Console.WriteLine($"{c.Name,6} -- {c.State}");
+            }
 
             // számok értéke növelve 2-vel
+            var kettovel = from n in numbers select n + 2;
+
+            var kettotomb = kettovel.ToArray();
+
+            for (int i = 0; i < kettotomb.Length; i++)
+            {
+                Console.WriteLine($"{numbers[i]} --> {kettotomb[i]}");
+            }
+
 
 
             // A Customer-ből csak név és telefonszám kell --> anonim objektum típus felhasználása
 
+            var namePhone = from p in customers orderby p.Name descending select p;
+            foreach (var f in namePhone)
+            {
+                Console.WriteLine($"{ f.Name} - {f.Phone}");
+            }
 
             // számokból --> szöveg
 
+            int[] Tomb = { 2, 4, 0, 1, 9, 6 };
 
-            // csoportosítás 
+            var szoveges = from u in Tomb select numNames[u];
+            Console.WriteLine();
+            foreach (var i in szoveges)
+            {
+                Console.Write($"{i}, ");
+            }
+
+            // csoportosítás ű
+            var nevek = from c in customers select c.Name;
+            var nevLista = nevek.ToList();
+
+            var kezdoBetu = from n in nevLista
+                            orderby n
+                            where n[0] != 'R'
+                            group n by n[0] into tempNevek
+                            select tempNevek;
 
 
-
+            Console.WriteLine("\nCsoportosítás kezdőbetű szerint");
+            foreach (var csoport in kezdoBetu)
+            {
+                Console.WriteLine("Kezdőbetű: {0}", csoport.Key);
+                foreach (var csoportTag in csoport)
+                {
+                    Console.WriteLine($"\t{csoportTag}");
+                }
+            }
             Console.ReadLine();
         }
 
